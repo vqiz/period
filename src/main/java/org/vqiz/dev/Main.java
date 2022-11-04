@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManager;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.vqiz.dev.listener.GuildChannelUpdate;
+import org.vqiz.dev.listener.MESSAGERECIVE;
 import org.vqiz.dev.mysql.DatabaseManager;
 import org.vqiz.dev.mysql.Table;
 
@@ -42,7 +44,13 @@ public class Main {
         builder.enableIntents(GatewayIntent.GUILD_MESSAGE_REACTIONS);
         builder.enableIntents(GatewayIntent.GUILD_MESSAGES);
         builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
-
+        bot = builder.build();
+        bot.addEventListener(new GuildChannelUpdate());
+        bot.addEventListener(new MESSAGERECIVE());
+        for (Member member : bot.getGuildById(config.get("GUILDID")).getMembers()){
+            checkuser(member, bot.getGuildById(config.get("GUILDID")));
+        }
+        start();
     }
     public static void start(){
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -68,6 +76,41 @@ public class Main {
         if (!messages.dataexist("ID", member.getId())){
             messages.insert("'" + member.getId() +"','0'");
         }
+    }
+    public static void checkuser(Member member, Guild guild){
+        if (member.getRoles().contains(guild.getRoleById(config.get("VERTRAUTERROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPVERTRAUTER")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("BAUERROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPBAUER")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("RITTERROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPRITTER")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("BARONROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPBARON")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("GRAFROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPGRAF")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("HERZOGROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPHERZOG")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("KÖNIGROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPKÖNIG")));
+        }
+        if (member.getRoles().contains(guild.getRoleById(config.get("KAISERROLEID")))){
+            messages.setInt(member.getId(), "ID", "XP", Integer.parseInt(config.get("REQUIREDXPKAISER")));
+        }
+
+
+
+
+
+
+
+
+
     }
     public static void roleuser(Member member, Guild guild){
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPVERTRAUTER")) && !member.getRoles().contains(guild.getRoleById(config.get("VERTRAUTERROLEID")))){
