@@ -115,149 +115,61 @@ public class Main {
     public static void roleuser(Member member, Guild guild){
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPVERTRAUTER")) && !member.getRoles().contains(guild.getRoleById(config.get("VERTRAUTERROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("VERTRAUTERROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Vertrauter"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
+            Dmsuseronlvlup(member, "Vertrauter");
 
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPBAUER")) && !member.getRoles().contains(guild.getRoleById(config.get("BAUERROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("BAUERROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Bauer"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
+            Dmsuseronlvlup(member, "Bauer");
 
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPRITTER")) && !member.getRoles().contains(guild.getRoleById(config.get("RITTERROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("RITTERROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Ritter"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
+            Dmsuseronlvlup(member, "Ritter");
 
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPBARON")) && !member.getRoles().contains(guild.getRoleById(config.get("BARONROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("BARONROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Ritter"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
-
+            Dmsuseronlvlup(member, "Baron");
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPGRAF")) && !member.getRoles().contains(guild.getRoleById(config.get("GRAFROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("GRAFROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Graf"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
+            Dmsuseronlvlup(member, "Graf");
 
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPHERZOG")) && !member.getRoles().contains(guild.getRoleById(config.get("HERZOGROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("HERZOGROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Herzog"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
+            Dmsuseronlvlup(member, "Herzog");
 
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPKÖNIG")) && !member.getRoles().contains(guild.getRoleById(config.get("KÖNIGROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("KÖNIGROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "König"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
-
-            }
+            Dmsuseronlvlup(member, "König");
 
         }
         if (messages.getInt(member.getId(), "ID", "XP") >Integer.parseInt(config.get("REQUIREDXPKAISER")) && !member.getRoles().contains(guild.getRoleById(config.get("KAISERROLEID")))){
             guild.addRoleToMember(member, guild.getRoleById(config.get("KAISERROLEID"))).queue();
-            if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))){
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle(config.get("LVLUPEMBEDTITLE"));
-                builder.setColor(Color.GREEN);
-                builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", "Kaiser"));
-                builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
-                try {
-                    builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
-                }catch (Exception e){
-                    System.out.println("NONE or invalid Embed THumpnial !");
-                }
-                sendMessage(member.getUser(), builder.build());
+            Dmsuseronlvlup(member, "Kaiser");
 
-            }
 
         }
 
+    }
+    public static void Dmsuseronlvlup(Member member, String NAME){
+        if (Boolean.parseBoolean(config.get("DMUSERONLEVELUP"))) {
+            EmbedBuilder builder = new EmbedBuilder();
+            builder.setTitle(config.get("LVLUPEMBEDTITLE"));
+            builder.setColor(Color.GREEN);
+            builder.setDescription(config.get("LVLUPEMBEDDESCRIPTION").replace("[user]", member.getUser().getAsMention()).replace("[rank]", NAME));
+            builder.setFooter(config.get("LVLUPEMBEDFOOTER"));
+            try {
+                builder.setThumbnail(config.get("LVLUPEMBEDTHUMP"));
+            } catch (Exception e) {
+                System.out.println("NONE or invalid Embed THumpnial !");
+            }
+            sendMessage(member.getUser(), builder.build());
+
+        }
     }
     public static void sendMessage(User user, MessageEmbed content) {
         user.openPrivateChannel()
