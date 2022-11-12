@@ -21,6 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
+    public static ArrayList<Member> welcome;
     public static ArrayList<Member> incalls;
     public static ShardManager bot;
     public static Dotenv config;
