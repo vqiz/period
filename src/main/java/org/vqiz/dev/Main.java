@@ -69,6 +69,7 @@ public class Main {
         }
     }
     public static Warn getwarns(Member member, int wich){
+        
             if (!warns.getString(member.getId(), "ID", "WARN" + wich).equals("null")){
                 Warn warn = new Warn();
                 warn.member = member;
