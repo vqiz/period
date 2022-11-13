@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManager;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.vqiz.dev.commands.Verify;
+import org.vqiz.dev.commands.Warncommand;
 import org.vqiz.dev.listener.GuildChannelUpdate;
 import org.vqiz.dev.listener.MESSAGERECIVE;
 import org.vqiz.dev.mysql.DatabaseManager;
@@ -16,6 +18,7 @@ import org.vqiz.dev.utils.Warn;
 
 import java.awt.*;
 import java.security.UnrecoverableEntryException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -51,6 +54,8 @@ public class Main {
         bot = builder.build();
         bot.addEventListener(new GuildChannelUpdate());
         bot.addEventListener(new MESSAGERECIVE());
+        bot.addEventListener(new Verify());
+        bot.addEventListener(new Warncommand());
         for (Member member : bot.getGuildById(config.get("GUILDID")).getMembers()){
             checkuser(member, bot.getGuildById(config.get("GUILDID")));
         }
@@ -63,28 +68,47 @@ public class Main {
 
         }
     }
-    public static ArrayList getwarns(Member member){
-        ArrayList<Warn> var = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
-            if (!warns.getString(member.getId(), "ID", "WARN" + i).equals("null")){
+    public static Warn getwarns(Member member, int wich){
+            if (!warns.getString(member.getId(), "ID", "WARN" + wich).equals("null")){
                 Warn warn = new Warn();
                 warn.member = member;
-                warn.reason = warns.getString(member.getId(), "ID", "WARNREASON" + i);
-                warn.banner = bot.getGuildById(config.get("GUILDID")).getMemberById(warns.getString(member.getId(), "ID", "WARN" + i + "FROM"));
-                warn.time = warns.getString(member.getId(), "ID", "WARN" + i +"TIME");
-                var.add(warn);
+                warn.reason = warns.getString(member.getId(), "ID", "WARNREASON" + wich);
+                warn.banner = bot.getGuildById(config.get("GUILDID")).getMemberById(warns.getString(member.getId(), "ID", "WARN" + wich + "FROM"));
+                warn.time = warns.getString(member.getId(), "ID", "WARN" + wich +"TIME");
+                return warn;
+            }
+            return null;
+
+
+
+
+    }
+    public static void addwarn(Member member, String reason, Member from){
+        for (int i = 1; i < 4; i++){
+            if (warns.getString(member.getId(), "ID", "WARN" + i).equals("null")){
+                warns.setString(member.getId(), "ID", "WARN" + i, "true");
+                warns.setString(member.getId(), "ID", "WARN" + i + "FROM", from.getId());
+                warns.setString(member.getId(), "ID", "WARNREASON" + i, reason);
+                warns.setString(member.getId(), "ID", "WARN"+ i + "TIME", LocalTime.now().toString());
+                EmbedBuilder builder = new EmbedBuilder();
+                builder.setTitle("WARN");
+                builder.setColor(Color.RED);
+                builder.setDescription("Das Teammitglied " + from.getAsMention() + " hat " + member.getAsMention() + " gewarnt ! \n  es ist sein " + i + " warn. \n Grund : " + reason + "\n Zeit : " + LocalTime.now());
+                builder.setFooter("MODERATION SYSTEM");
+                bot.getGuildById(config.get("GUILDID")).getTextChannelById(config.get("warnlogchannelid")).sendMessageEmbeds(builder.build()).queue();
+
+                break;
+            }
+            if (i == 3){
+                EmbedBuilder builder = new EmbedBuilder();
+                builder.setTitle("WARN");
+                builder.setColor(Color.RED);
+                builder.setDescription(from.getAsMention() + " der user " + member.getAsMention() + " hat bereits 3 verwarnungen ereicht !");
+                builder.setFooter("MODERATION SYSTEM");
+                bot.getGuildById(config.get("GUILDID")).getTextChannelById(config.get("warnlogchannelid")).sendMessageEmbeds(builder.build()).queue();
             }
 
-
         }
-        if (var.isEmpty()){
-            return null;
-        }else {
-            return var;
-        }
-    }
-    public static void setwarn(Member member){
-        
     }
     public static void verify(Guild guild){
         if (welcome.size() == 3){
