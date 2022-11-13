@@ -27,11 +27,13 @@ public class Main {
     public static Dotenv config;
     public static DatabaseManager db;
     public static Table messages = new Table("dcuserstats", "ID TEXT, XP TEXT");
+    public static Table warns = new Table("dcuserwarns", "ID TEXT, WARN1 TEXT, WARN2 TEXT, WARN3 TEXT");
     public static void main(String[] args) {
         System.out.println("Starting System up !");
         config = Dotenv.load();
         db = new DatabaseManager(config.get("MYSQLHOST"),"3306", config.get("MYSQLUSER"), config.get("MYSQLDB"), config.get("MYSQLPASSWORD")).setAsync(false);
         messages.create(db);
+        warns.create(db);
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(config.get("TOKTEN"));
         builder.setActivity(Activity.listening(config.get("STATUS")));
         builder.setStatus(OnlineStatus.ONLINE);
@@ -52,6 +54,22 @@ public class Main {
             checkuser(member, bot.getGuildById(config.get("GUILDID")));
         }
         start();
+
+    }
+    public static void verify(Guild guild){
+        if (welcome.size() == 3){
+            String memberstring = "";
+            for (Member member : welcome){
+                memberstring = memberstring + " " + member.getAsMention();
+                welcome.remove(member);
+            }
+            EmbedBuilder builder = new EmbedBuilder();
+            builder.setTitle(config.get("welcometitle"));
+            builder.setDescription(config.get("welcomedescription").replace("[user]", memberstring));
+            builder.setFooter(config.get("welcomefooter"));
+            guild.getTextChannelById(config.get("LabereckenChannelid")).sendMessageEmbeds(builder.build()).queue();
+        }
+
     }
     public static void start(){
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
