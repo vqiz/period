@@ -12,6 +12,7 @@ import org.vqiz.dev.listener.GuildChannelUpdate;
 import org.vqiz.dev.listener.MESSAGERECIVE;
 import org.vqiz.dev.mysql.DatabaseManager;
 import org.vqiz.dev.mysql.Table;
+import org.vqiz.dev.utils.Warn;
 
 import java.awt.*;
 import java.security.UnrecoverableEntryException;
@@ -27,7 +28,7 @@ public class Main {
     public static Dotenv config;
     public static DatabaseManager db;
     public static Table messages = new Table("dcuserstats", "ID TEXT, XP TEXT");
-    public static Table warns = new Table("dcuserwarns", "ID TEXT, WARN1 TEXT, WARN2 TEXT, WARN3 TEXT");
+    public static Table warns = new Table("dcuserwarns", "ID TEXT, WARN1 TEXT, WARN2 TEXT, WARN3 TEXT, WARN1FROM TEXT, WARN2FROM TEXT, WARN3FROM TEXT, WARNREASON1 TEXT, WARNREASON2 TEXT, WARNREASON3 TEXT,WARN1TIME TEXT, WARN2TIME TEXT, WARN3TIME TEXT");
     public static void main(String[] args) {
         System.out.println("Starting System up !");
         config = Dotenv.load();
@@ -54,7 +55,36 @@ public class Main {
             checkuser(member, bot.getGuildById(config.get("GUILDID")));
         }
         start();
+        for (Member member : bot.getGuildById(config.get("GUILDID")).getMembers()){
+            if (!warns.dataexist("ID", member.getId())){
+                warns.insert("'" + member.getId() +"','null','null','null','null','null','null','null','null','null','null','null','null'");
+                System.out.println("Added " + member.getNickname() + " to database");
+            }
 
+        }
+    }
+    public static ArrayList getwarns(Member member){
+        ArrayList<Warn> var = new ArrayList<>();
+        for (int i = 0; i < 3; i++){
+            if (!warns.getString(member.getId(), "ID", "WARN" + i).equals("null")){
+                Warn warn = new Warn();
+                warn.member = member;
+                warn.reason = warns.getString(member.getId(), "ID", "WARNREASON" + i);
+                warn.banner = bot.getGuildById(config.get("GUILDID")).getMemberById(warns.getString(member.getId(), "ID", "WARN" + i + "FROM"));
+                warn.time = warns.getString(member.getId(), "ID", "WARN" + i +"TIME");
+                var.add(warn);
+            }
+
+
+        }
+        if (var.isEmpty()){
+            return null;
+        }else {
+            return var;
+        }
+    }
+    public static void setwarn(Member member){
+        
     }
     public static void verify(Guild guild){
         if (welcome.size() == 3){
